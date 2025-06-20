@@ -80,7 +80,7 @@
           .catch((err) => {
             console.error("Erro ao carregar dados da planilha:", err);
           });
-      }, 1000); // Atualiza a cada 60 segundos
+      }, 600000); // Atualiza a cada 10 minutos
       const url = `https://docs.google.com/spreadsheets/d/${planilhaID}/gviz/tq?tqx=out:json&gid=${abaID}`;
     </script>
   </body>
