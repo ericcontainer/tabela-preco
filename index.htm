@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabela de Preços</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        padding: 20px;
+        background: #f8f8f8;
+      }
+
+      h1 {
+        color: #b81310;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #e1dfdb;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      #id-preco {
+        text-align: right;
+      }
+      td {
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      th {
+        background-color: #b81310;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #b81310;
+        color: white;
+      }
+
+      tr:nth-child(odd) {
+        background-color: #ffffff;
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="tabela-precos">
+      <tbody></tbody>
+    </table>
+
+    <script>
+      const planilhaID = "1ei7ECOiBACxLQDeRLte8wgUKOXqjX7zBNjrDAE6xgis";
+      const abaID = "0";
+      setInterval(() => {
+        // Limpa a tabela
+        document.querySelector("#tabela-precos tbody").innerHTML = "";
+        fetch(url)
+          .then((res) => res.text())
+          .then((data) => {
+            console.log(data);
+            const jsonData = JSON.parse(data.substring(47).slice(0, -2));
+            const linhas = jsonData.table.rows;
+
+            const tbody = document.querySelector("#tabela-precos tbody");
+            linhas.forEach((linha) => {
+              const produto = linha.c[0]?.v || "";
+              const preco = linha.c[2]?.v || "";
+
+              const tr = document.createElement("tr");
+              tr.innerHTML = `<td>${produto}</td><td id="id-preco">R$ ${preco} Kg</td>`;
+              tbody.appendChild(tr);
+            });
+          })
+          .catch((err) => {
+            console.error("Erro ao carregar dados da planilha:", err);
+          });
+      }, 1000); // Atualiza a cada 60 segundos
+      const url = `https://docs.google.com/spreadsheets/d/${planilhaID}/gviz/tq?tqx=out:json&gid=${abaID}`;
+    </script>
+  </body>
+</html>
